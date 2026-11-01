@@ -8,7 +8,7 @@
 :root{color-scheme:dark;--bg:#000;--card:#111;--ink:#ececec;--mute:#a3a3a3;--line:#2a2a2a;--acc:#4fd1c2;--g:#4fd1c2;--t:#f5b942;--p:#b79cff;--warn:#2e2710;--warnl:#7a6522;--bad:#2e1818}
 body[data-tab=guide]{--acc:var(--g)}body[data-tab=tools]{--acc:var(--t)}body[data-tab=prod]{--acc:var(--p)}
 *{box-sizing:border-box}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{margin:0 auto;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif;padding:0 12px 96px;max-width:980px}
+body{margin:0 auto;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif;padding:10px 12px calc(var(--dh,104px) + 40px);max-width:980px}
 h1{font-size:1.5rem;margin:.4rem 0}h2{font-size:1.15rem;margin:1.4rem 0 .4rem;color:var(--acc);scroll-margin-top:8px}
 .bar,#nav{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 input,button,#nav a{font:inherit;font-family:system-ui,sans-serif;font-size:.9rem;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 10px;text-decoration:none}
@@ -33,27 +33,25 @@ table.ref a{color:var(--acc);font-weight:600}
 .box{padding:10px 12px}.box h3{font-size:1.05rem;margin:.2rem 0 .4rem}.box ol{margin:0;padding-left:1.2rem}
 .box table{border-collapse:collapse;width:100%;font:.85rem system-ui,sans-serif}.box td,.box th{border-top:1px solid var(--line);padding:5px 4px;text-align:left;vertical-align:top}
 .note{color:var(--mute);font:.8rem system-ui,sans-serif}.note a{color:var(--acc)}
-@media(max-width:640px){table.ref{font-size:.76rem}table.ref th,table.ref td{padding:6px 5px}body{padding:8px 8px 96px}}
-.top{position:sticky;top:0;z-index:20;background:var(--bg);padding:8px 0 6px;display:flex;gap:6px;flex-wrap:wrap}
-.top input{flex:1 1 0;min-width:0;font-size:16px}
-#mp{flex:1 1 100%;max-height:75vh;max-height:75dvh;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:8px}
+@media(max-width:640px){table.ref{font-size:.76rem}table.ref th,table.ref td{padding:6px 5px}body{padding:8px 8px calc(var(--dh,104px) + 40px)}}
+#dock{position:fixed;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px) + var(--kb,0px));width:calc(100% - 24px);max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:6px;padding:6px;background:rgba(17,17,17,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.7);z-index:30}
+.sr{display:flex;gap:6px}.sr input{flex:1 1 0;min-width:0;font-size:16px}.sr button{flex:0 0 auto}
+#mp{position:absolute;left:0;right:0;bottom:calc(100% + 8px);max-height:55vh;max-height:var(--mh,55vh);overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.7)}
 #mp[hidden]{display:none}
-.fab{position:fixed;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px) + var(--kb,0px));z-index:30;box-shadow:0 2px 8px rgba(0,0,0,.25);background:var(--acc);color:var(--bg);border-color:var(--acc)}
-.card,h2,tr[id]{scroll-margin-top:68px}
-#tabs{position:fixed;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px) + var(--kb,0px));width:calc(100% - 24px);max-width:420px;margin:0 auto;display:flex;gap:6px;padding:6px;background:rgba(17,17,17,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.7);z-index:30}
+.fab{position:fixed;right:12px;bottom:calc(var(--dh,104px) + 20px + env(safe-area-inset-bottom,0px) + var(--kb,0px));z-index:29;box-shadow:0 2px 8px rgba(0,0,0,.25);background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.card,h2,tr[id]{scroll-margin-top:12px}
+#tabs{display:flex;gap:6px}
 #tabs button{flex:1 1 0;min-width:0;font-weight:600;font-size:.8rem;padding:8px 2px;white-space:nowrap;background:transparent;color:var(--c);border-color:var(--line)}
 #tabs [data-tab=guide]{--c:var(--g)}#tabs [data-tab=tools]{--c:var(--t)}#tabs [data-tab=prod]{--c:var(--p)}
 #tabs button[aria-selected=true]{background:var(--c);color:#000;border-color:var(--c)}
 .box th:first-child,.box td:first-child{width:28%}.box table.pt th:first-child,.box table.pt td:first-child{width:46%}.box td{word-break:break-word}
 @media(max-width:340px){#tabs button{font-size:.66rem}}
-html.kb #tabs{bottom:calc(8px + var(--kb,0px))}html.kb .fab{bottom:calc(68px + var(--kb,0px))}html.kb body{padding-bottom:calc(96px + var(--kb,0px))}
+html.kb #dock{bottom:calc(8px + var(--kb,0px))}html.kb .fab{bottom:calc(var(--dh,104px) + 16px + var(--kb,0px))}html.kb body{padding-bottom:calc(var(--dh,104px) + 40px + var(--kb,0px))}
 .pane{display:none}body[data-tab=guide] #p-guide,body[data-tab=tools] #p-tools,body[data-tab=prod] #p-prod{display:block}
-@media print{:root{--bg:#fff;--card:#fff;--ink:#000;--mute:#444;--line:#999;--acc:#0f766e;--warn:#fff4d6;--warnl:#e0b84a;--bad:#fdeaea}body{background:#fff;color:#000;max-width:none}.bar,#nav,.noprint,.top,.fab,#tabs{display:none}.card,table.ref tr{break-inside:avoid;page-break-inside:avoid}.det{display:block!important}.pane{display:block!important}:root{color-scheme:light;--g:#0f766e;--t:#b45309;--p:#6d28d9}#p-guide{--acc:var(--g)}#p-tools{--acc:var(--t)}#p-prod{--acc:var(--p)}h2{break-after:avoid;page-break-after:avoid}}
+@media print{:root{--bg:#fff;--card:#fff;--ink:#000;--mute:#444;--line:#999;--acc:#0f766e;--warn:#fff4d6;--warnl:#e0b84a;--bad:#fdeaea}body{background:#fff;color:#000;max-width:none}.bar,#nav,.noprint,#dock,.fab{display:none}.card,table.ref tr{break-inside:avoid;page-break-inside:avoid}.det{display:block!important}.pane{display:block!important}:root{color-scheme:light;--g:#0f766e;--t:#b45309;--p:#6d28d9}#p-guide{--acc:var(--g)}#p-tools{--acc:var(--t)}#p-prod{--acc:var(--p)}h2{break-after:avoid;page-break-after:avoid}}
 </style></head><body data-tab="guide">
 <noscript><div class="safe"><b>JavaScript is off here.</b> Open this file in Safari itself, not a Files, Mail or Quick Look preview.</div></noscript>
 <div id="err" class="safe" hidden></div>
-<div class="top"><input id="q" type="search" placeholder="Search e.g. mould, toilet, floor" aria-label="Search"><button id="bm">Menu</button>
-<div id="mp" hidden><div id="nav"></div><div class="bar"><button id="bx">Expand all details</button><button id="bc">Collapse all</button><button id="bp">Print / PDF</button><button id="be">Export JSON</button><button id="bi">Import JSON</button></div></div><input id="f" type="file" accept=".json,application/json" hidden></div>
 <div id="p-guide" class="pane"><div id="ref"></div>
 <h2 id="det">Details</h2>
 <div class="safe"><b>Safety:</b> never mix bleach with vinegar, ammonia or other cleaners (toxic fumes). Ventilate, wear gloves for chemicals and pest baits, keep baits away from children and pets. Spot-test first.</div>
@@ -63,7 +61,7 @@ html.kb #tabs{bottom:calc(8px + var(--kb,0px))}html.kb .fab{bottom:calc(68px + v
 <h2 id="det2">Details</h2>
 <div id="list2"></div></div>
 <div id="p-prod" class="pane"><div id="boxes"></div></div>
-<div id="tabs" role="tablist"><button role="tab" data-tab="guide" aria-selected="true">Guide</button><button role="tab" data-tab="tools" aria-selected="false">Tools</button><button role="tab" data-tab="prod" aria-selected="false">Products</button></div>
+<div id="dock"><div id="mp" hidden><div id="nav"></div><div class="bar"><button id="bx">Expand all details</button><button id="bc">Collapse all</button><button id="bp">Print / PDF</button><button id="be">Export JSON</button><button id="bi">Import JSON</button></div></div><div class="sr"><input id="q" type="search" placeholder="Search e.g. mould, toilet" aria-label="Search" enterkeyhint="search"><button id="bm">Menu</button></div><div id="tabs" role="tablist"><button role="tab" data-tab="guide" aria-selected="true">Guide</button><button role="tab" data-tab="tools" aria-selected="false">Tools</button><button role="tab" data-tab="prod" aria-selected="false">Products</button></div><input id="f" type="file" accept=".json,application/json" hidden></div>
 <button id="fb" class="fab noprint">↑ Top</button>
 <script>
 window.onerror=function(m,u,l){var e=document.getElementById("err");if(e){e.hidden=false;e.textContent="Script error: "+m+" (line "+l+")"}};
@@ -120,9 +118,9 @@ document.getElementById("bm").onclick=function(){var p=document.getElementById("
 document.getElementById("mp").addEventListener("click",function(e){if(e.target.closest("a,button"))this.hidden=true});
 document.getElementById("fb").onclick=function(){var r=LAST!=null&&document.getElementById("r"+LAST);if(r){r.scrollIntoView({block:"center"})}else{window.scrollTo({top:0})}LAST=null;setFab()};
 function kbFix(){var v=window.visualViewport;if(!v)return;var d=document.documentElement;
-function upd(){var o=Math.round(window.innerHeight-v.height-v.offsetTop);var k=o>80?o:0;d.style.setProperty("--kb",k+"px");d.classList.toggle("kb",k>0)}
+function upd(){var dk=document.getElementById("dock"),vh=v.height;d.style.setProperty("--dh",dk.offsetHeight+"px");d.style.setProperty("--mh",Math.max(160,vh-dk.offsetHeight-60)+"px");var o=Math.round(window.innerHeight-v.height-v.offsetTop);var k=o>80?o:0;d.style.setProperty("--kb",k+"px");d.classList.toggle("kb",k>0)}
 v.addEventListener("resize",upd);v.addEventListener("scroll",upd);window.addEventListener("orientationchange",upd);
 var q=document.getElementById("q");q.addEventListener("focus",function(){setTimeout(upd,350)});q.addEventListener("blur",function(){setTimeout(upd,350)});upd()}
-try{kbFix()}catch(e){}
+window.addEventListener("resize",function(){document.documentElement.style.setProperty("--dh",document.getElementById("dock").offsetHeight+"px")});try{kbFix()}catch(e){document.documentElement.style.setProperty("--dh",document.getElementById("dock").offsetHeight+"px")}
 render();
 </script></body></html>
