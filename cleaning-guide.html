@@ -37,19 +37,26 @@ table.ref a{color:var(--acc);font-weight:600}
 #mp{flex:1 1 100%;max-height:75vh;max-height:75dvh;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:8px}
 #mp[hidden]{display:none}
 .fab{position:fixed;right:12px;bottom:14px;z-index:30;box-shadow:0 2px 8px rgba(0,0,0,.25);background:var(--acc);color:var(--bg);border-color:var(--acc)}
-.card,h2,tr[id]{scroll-margin-top:72px}
-@media print{:root{--bg:#fff;--card:#fff;--ink:#000;--mute:#444;--line:#999;--acc:#0f766e;--warn:#fff4d6;--warnl:#e0b84a;--bad:#fdeaea}body{background:#fff;color:#000;max-width:none}.bar,#nav,.noprint,.top,.fab{display:none}.card,table.ref tr{break-inside:avoid;page-break-inside:avoid}.det{display:block!important}h2{break-after:avoid;page-break-after:avoid}}
-</style></head><body>
+.card,h2,tr[id]{scroll-margin-top:112px}
+#tabs{flex:1 1 100%;display:flex;gap:6px}#tabs button{flex:1 1 0;min-width:0;font-weight:600;font-size:.8rem;padding:7px 3px;white-space:nowrap}#tabs button[aria-selected=true]{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+@media(max-width:340px){#tabs button{font-size:.7rem}}
+.pane{display:none}body[data-tab=guide] #p-guide,body[data-tab=tools] #p-tools,body[data-tab=prod] #p-prod{display:block}
+@media print{:root{--bg:#fff;--card:#fff;--ink:#000;--mute:#444;--line:#999;--acc:#0f766e;--warn:#fff4d6;--warnl:#e0b84a;--bad:#fdeaea}body{background:#fff;color:#000;max-width:none}.bar,#nav,.noprint,.top,.fab{display:none}.card,table.ref tr{break-inside:avoid;page-break-inside:avoid}.det{display:block!important}.pane{display:block!important}h2{break-after:avoid;page-break-after:avoid}}
+</style></head><body data-tab="guide">
 <noscript><div class="safe"><b>JavaScript is off here.</b> Open this file in Safari itself, not a Files, Mail or Quick Look preview.</div></noscript>
 <div id="err" class="safe" hidden></div>
 <div class="top"><input id="q" type="search" placeholder="Search e.g. mould, toilet, floor" aria-label="Search"><button id="bm">Menu</button>
+<div id="tabs" role="tablist"><button role="tab" data-tab="guide" aria-selected="true">Guide</button><button role="tab" data-tab="tools" aria-selected="false">Tools</button><button role="tab" data-tab="prod" aria-selected="false">Products</button></div>
 <div id="mp" hidden><div id="nav"></div><div class="bar"><button id="bx">Expand all details</button><button id="bc">Collapse all</button><button id="bp">Print / PDF</button><button id="be">Export JSON</button><button id="bi">Import JSON</button></div></div><input id="f" type="file" accept=".json,application/json" hidden></div>
-<div id="ref"></div>
-<div id="boxes"></div>
+<div id="p-guide" class="pane"><div id="ref"></div>
 <h2 id="det">Details</h2>
 <div class="safe"><b>Safety:</b> never mix bleach with vinegar, ammonia or other cleaners (toxic fumes). Ventilate, wear gloves for chemicals and pest baits, keep baits away from children and pets. Spot-test first.</div>
 <p class="note noprint">Tap a row’s Details link, or a card, to open the full steps. Export JSON to back up or edit the data, then Import to load it.</p>
-<div id="list"></div>
+<div id="list"></div></div>
+<div id="p-tools" class="pane"><div id="ref2"></div>
+<h2 id="det2">Details</h2>
+<div id="list2"></div></div>
+<div id="p-prod" class="pane"><div id="boxes"></div></div>
 <button id="fb" class="fab noprint">↑ Top</button>
 <script>
 window.onerror=function(m,u,l){var e=document.getElementById("err");if(e){e.hidden=false;e.textContent="Script error: "+m+" (line "+l+")"}};
@@ -59,25 +66,38 @@ var OPEN={};
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function slug(c){return"c-"+String(c).toLowerCase().replace(/[^a-z]+/g,"-")}
 function allCats(){var a=CATS.slice();DATA.items.forEach(function(it){if(a.indexOf(it.c)<0)a.push(it.c)});return a}
-function ok(it,q){return!q||JSON.stringify(it).toLowerCase().indexOf(q)>-1}
-function ref(q){var out="",nav="";allCats().forEach(function(c){var rows="";
+function vals(x){if(x==null)return"";if(Array.isArray(x))return x.map(function(v){return vals(v)}).join(" ");if(typeof x==="object")return Object.keys(x).map(function(k){return vals(x[k])}).join(" ");return String(x)}
+function ok(it,q){return!q||vals(it).toLowerCase().indexOf(q)>-1}
+function ref(q,tool){var out="",nav="";allCats().forEach(function(c){if((c==="Tools")!==tool)return;var rows="";
 DATA.items.forEach(function(it,i){if(it.c!==c||!ok(it,q))return;
 rows+='<tr id="r'+i+'"><td><b>'+esc(it.t)+'</b><div class="fq">'+esc(it.f)+'</div><a href="#d'+i+'" data-i="'+i+'">Details</a></td><td>'+esc(it.w||it.s)+'</td><td>'+esc(it.n||it.a)+'</td></tr>'});
 if(rows){out+='<h2 id="'+slug(c)+'">'+esc(c)+'</h2><div class="tw"><table class="ref"><thead><tr><th>Item</th><th>Clean with</th><th>Avoid</th></tr></thead><tbody>'+rows+'</tbody></table></div>';nav+='<a href="#'+slug(c)+'">'+esc(c)+'</a>'}});
-document.getElementById("nav").innerHTML=nav+'<a href="#prod">Products and premixes</a>'+'<a href="#det">Details</a>';
-document.getElementById("ref").innerHTML=out||'<p class="note">No matches. Try another word.</p>'}
-function boxes(q){var fl=function(a){return(a||[]).filter(function(x){return!q||JSON.stringify(x).toLowerCase().indexOf(q)>-1})};var p=fl(DATA.products).map(function(x){return"<li><b>"+esc(x[0])+"</b>: "+esc(x[1])+"</li>"}).join("");
+return{out:out,nav:nav}}
+function boxes(q){var fl=function(a){return(a||[]).filter(function(x){return ok(x,q)})};var p=fl(DATA.products).map(function(x){return"<li><b>"+esc(x[0])+"</b>: "+esc(x[1])+"</li>"}).join("");
 var m=fl(DATA.mixes).map(function(x){return"<tr><td><b>"+esc(x[0])+"</b></td><td>"+esc(x[1])+"</td><td>"+esc(x[2])+"</td></tr>"}).join("");
 if(!p&&!m)return"";return'<h2 id="prod">Products and premixes'+(q?" matching your search":"")+'</h2>'+(p?'<div class="card"><div class="box"><h3>Product list</h3><ol>'+p+'</ol></div></div>':'')+(m?'<div class="card"><div class="box"><h3>Premix and solution list</h3><table><tr><th>Name</th><th>Mix</th><th>Use</th></tr>'+m+'</table></div></div>':'')}
 function card(it,i){var st=(it.st||[]).map(function(x){return"<li>"+esc(x)+"</li>"}).join("");
 var b=it.b?'<h4>Stubborn stains</h4><ul>'+it.b.map(function(x){return"<li>"+esc(x)+"</li>"}).join("")+"</ul>":"";
 return'<div class="card'+(OPEN[i]?" open":"")+'" id="d'+i+'"><button class="hd" data-t="'+i+'"><span class="cat">'+esc(it.c)+'</span><br><b>'+esc(it.t)+'</b><p class="sum">'+esc(it.s)+'</p><div class="meta">'+esc(it.f)+(it.$?" · "+esc(it.$):"")+'</div></button><div class="det"><h4>Steps</h4><ol>'+st+'</ol><h4>Household option</h4><p>'+esc(it.h)+'</p><h4>Shop option</h4><p>'+esc(it.p)+'</p>'+b+'<div class="avoid"><b>Avoid:</b> '+esc(it.a)+'</div><p class="note noprint"><a href="#r'+i+'" data-back="1">Back to table</a></p></div></div>'}
-function render(){var q=document.getElementById("q").value.toLowerCase();ref(q);
-document.getElementById("boxes").innerHTML=boxes(q);
-var out="";DATA.items.forEach(function(it,i){if(ok(it,q))out+=card(it,i)});
-document.getElementById("list").innerHTML=out}
+var TAB="guide",NAVS={guide:"",tools:"",prod:""},NAMES={guide:"Guide",tools:"Tools",prod:"Products"},KEYS=["guide","tools","prod"];
+function tabBtn(k){return document.querySelector('#tabs [data-tab="'+k+'"]')}
+function cnt(q,tool){var n=0;DATA.items.forEach(function(it){if((it.c==="Tools")===tool&&ok(it,q))n++});return n}
+function pcnt(q){return[DATA.products,DATA.mixes].reduce(function(n,a){return n+(a||[]).filter(function(x){return ok(x,q)}).length},0)}
+function lst(q,tool){var out="";DATA.items.forEach(function(it,i){if((it.c==="Tools")===tool&&ok(it,q))out+=card(it,i)});return out}
+function setNav(){document.getElementById("nav").innerHTML=NAVS[TAB]}
+function setTab(t){TAB=t;document.body.setAttribute("data-tab",t);KEYS.forEach(function(k){tabBtn(k).setAttribute("aria-selected",k===t?"true":"false")});setNav()}
+function render(){var q=document.getElementById("q").value.toLowerCase().trim();
+var g=ref(q,false),t=ref(q,true),n={guide:cnt(q,false),tools:cnt(q,true),prod:pcnt(q)};
+var none='<p class="note">'+(n.guide+n.tools+n.prod?"No matches in this tab.":"No matches. Try another word.")+'</p>';
+document.getElementById("ref").innerHTML=g.out||none;document.getElementById("ref2").innerHTML=t.out||none;
+document.getElementById("boxes").innerHTML=boxes(q)||none;
+document.getElementById("list").innerHTML=lst(q,false);document.getElementById("list2").innerHTML=lst(q,true);
+document.getElementById("det").hidden=!n.guide;document.getElementById("det2").hidden=!n.tools;
+NAVS.guide=g.nav+(n.guide?'<a href="#det">Details</a>':"");NAVS.tools=t.nav+(n.tools?'<a href="#det2">Details</a>':"");
+KEYS.forEach(function(k){tabBtn(k).textContent=NAMES[k]+(q?" ("+n[k]+")":"")});
+setNav()}
 var LAST=null;function setFab(){document.getElementById("fb").textContent=LAST==null?"↑ Top":"↩ Table"}
-document.addEventListener("click",function(e){if(e.target.closest("a[data-back]")){LAST=null;setFab();return}var a=e.target.closest("a[data-i]");if(a){LAST=a.getAttribute("data-i");setFab();OPEN[a.getAttribute("data-i")]=true;var c=document.getElementById("d"+a.getAttribute("data-i"));if(c)c.classList.add("open");return}
+document.addEventListener("click",function(e){var tb=e.target.closest("#tabs button");if(tb){setTab(tb.getAttribute("data-tab"));LAST=null;setFab();window.scrollTo(0,0);return}if(e.target.closest("a[data-back]")){LAST=null;setFab();return}var a=e.target.closest("a[data-i]");if(a){LAST=a.getAttribute("data-i");setFab();OPEN[a.getAttribute("data-i")]=true;var c=document.getElementById("d"+a.getAttribute("data-i"));if(c)c.classList.add("open");return}
 var h=e.target.closest(".hd");if(h){var i=h.getAttribute("data-t");OPEN[i]=!OPEN[i];h.parentNode.classList.toggle("open")}});
 document.getElementById("q").oninput=render;
 document.getElementById("bx").onclick=function(){DATA.items.forEach(function(x,i){OPEN[i]=true});render()};
